@@ -1,0 +1,64 @@
+﻿@page "/reports/goodscategory"
+@using System.Reflection
+@using Newtonsoft.Json
+@using WebServer.Models.ReportsService
+@using WebServer.Services
+@layout MainLayout
+@inject ReportsService ReportsService
+@inject IJSRuntime JSRuntime
+
+<div>
+    <form id="get-goods-category" enctype="multipart/form-data" action="/api/reports/GoodsCategory" method="get" target="_blank">
+        <SearchDropdown name="name"
+                        Bl_OnChange="((s) => Name=s)"
+                        Options="@ReportsService.GoodsCategories()" />
+    </form>
+    <canvas id="report-chart"></canvas>
+</div>
+
+@code {
+    private string _name { get; set; }
+    private string Name
+    {
+        get => _name;
+        set
+        {
+            Task.Run(GetResult);
+            _name = value;
+        }
+    }
+
+    private async Task GetResult()
+    {
+        string[] names = new[] { Name };
+        var goodsCategoryStatistics = names.Where((s) => !string.IsNullOrEmpty(s))
+            .Select(name => new KeyValuePair<string, IEnumerable<GoodsCategoryResponseModel>>(name, ReportsService.GoodsCategory(name)));
+        var jsons = goodsCategoryStatistics.Select(tp =>
+        {
+            var p = tp;
+            var arr = new int[24];
+            foreach (var s in p.Value)
+            {
+                arr[(int)(s.Timespan / 1000 / 60 / 60)]++;
+            }
+            object[] jsonPoints = new object[24];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                jsonPoints[i] = new
+                {
+                    x = i,
+                    y = arr[i]
+                };
+            }
+            var json = new
+            {
+                Name = p.Key,
+                Points = jsonPoints
+            };
+            return json;
+        });
+
+        string fullJson = JsonConvert.SerializeObject(jsons);
+        await JSRuntime.InvokeAsync<Task>("goodsCategory.setResult", new object[] { fullJson });
+    }
+}

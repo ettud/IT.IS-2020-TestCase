@@ -1,0 +1,74 @@
+﻿@using WebServer.Services
+@inject ReportsService ReportsService
+@inject IDateTimeService DateTimeService
+@inject IJSRuntime JSRuntime
+
+<div>
+    <form id="@($"{Id}")" enctype="multipart/form-data" action="@FormActionUri" method="@(FormMethod?.Method??"get")" target="_blank">
+        <input id="@($"{Id}-from")" name="from" type="date" @bind-value="_curFrom" @bind-value:event="oninput"/>
+        <input id="@($"{Id}-to")" name="to" type="date" @bind-value="_curTo" @bind-value:event="oninput"/>
+        <input id="@($"{Id}-submit")" type="submit" value="Submit" @onclick="GetResult">
+    </form>
+    <div>@Result</div>
+</div>
+
+@code
+{
+    private DateTime? _lastFrom { get; set; }
+    private DateTime? _lastTo { get; set; }
+    private DateTime? __curFrom { get; set; }
+    private DateTime? __curTo { get; set; }
+    
+    private DateTime? _curFrom
+    {
+        get => __curFrom;
+        set
+        {
+            __curFrom = value;
+            Task.Run(GetResult);
+        }
+    }
+    private DateTime? _curTo
+    {
+        get => __curTo;
+        set
+        {
+            __curTo = value;
+            Task.Run(GetResult);
+        }
+    }
+    private string Result { get; set; }
+
+    [Parameter] public string Id { get; set; }
+    [Parameter] public string FormActionUri { get; set; }
+    [Parameter] public HttpMethod FormMethod { get; set; }
+    [Parameter] public DateTime? From { get; set; }
+    [Parameter] public DateTime? To { get; set; }
+    [Parameter] public Func<DateTime, DateTime, string> Source { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _curFrom = From;
+        _curTo = To;
+    }
+
+    private async Task GetResult()
+    {
+        if (_curFrom.HasValue && _curTo.HasValue)
+        {
+            if (Source != null)
+            {
+                Result = Source.Invoke(_curFrom.Value, _curTo.Value);
+                _lastFrom = _curFrom;
+                _lastTo = _curTo;
+                StateHasChanged();
+            }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeAsync<Task>("formDisablerBlazorWrapperWithBlazor", new object[] { "get-carts-submit", });
+        GetResult();
+    }
+}

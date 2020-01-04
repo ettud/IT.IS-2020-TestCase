@@ -1,0 +1,85 @@
+﻿@page "/reports/ComplementaryGoods"
+@using System.Reflection
+@using Newtonsoft.Json
+@using WebServer.Models.ReportsService
+@using WebServer.Services
+@layout MainLayout
+@inject ReportsService ReportsService
+@inject IJSRuntime JSRuntime
+
+    <div>
+        <form id="get-complementary-goods" enctype="multipart/form-data" action="/api/reports/ComplementaryGoods" method="get" target="_blank">
+            @{
+                List<string> options = null;
+                try
+                {
+                    options = ReportsService.GoodsCategories();
+                }
+                catch
+                {
+                    <p>Unknown error, database is likely to be disconnected</p>
+                }
+                if (options != null)
+                {
+                    <SearchDropdown name="name"
+                                    Bl_OnChange="((s) => Name=s)"
+                                    Options="@options" />
+                }
+            }
+            <input id="get-complementary-goods-submit" type="submit" value="Submit" @onclick="GetResult">
+        </form>
+        <canvas id="report-chart"></canvas>
+    </div>
+
+@code {
+    private string _name { get; set; }
+    private string Name
+    {
+        get => _name;
+        set
+        {
+            Task.Run(GetResult);
+            _name = value;
+        }
+    }
+    private LogBasePresenter.ResponseModels.GoodsCategoriesCombinationsStatistics _combinations = null;
+    private Task _onInit = null;
+
+    private async Task GetResult()
+    {
+        if (!string.IsNullOrEmpty(Name))
+        {
+            if(_onInit?.Status == TaskStatus.Running)
+            {
+                _onInit.Wait();
+            }
+            if (_combinations != null)
+            {
+                if (_combinations.Statistics.TryGetValue(Name, out var report))
+                {
+                    var r = report
+                        .Select(p =>
+                        new
+                        {
+                            Name = p.Key,
+                            Number = p.Value
+                        });
+                    string fullJson = JsonConvert.SerializeObject(r);
+                    await JSRuntime.InvokeAsync<Task>("ComplementaryGoods.setResult", new object[] { fullJson });
+                }
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _onInit = Task.Run(() =>{
+            _combinations = ReportsService.CategoriesCombinations();
+        });
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeAsync<Task>("formDisablerBlazorWrapperWithBlazor", new object[] { "get-complementary-goods-submit", });
+    }
+}

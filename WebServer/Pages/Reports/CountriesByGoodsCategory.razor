@@ -1,0 +1,43 @@
+﻿@page "/reports/CountriesByGoodsCategory"
+@using System.Reflection
+@using Newtonsoft.Json
+@using WebServer.Models.ReportsService
+@using WebServer.Services
+@layout MainLayout
+@inject ReportsService ReportsService
+@inject IJSRuntime JSRuntime
+
+    <div>
+        <SearchDropdown name="name"
+                        Bl_OnChange="((s) => Name=s)"
+                        Options="@ReportsService.GoodsCategories()" />
+        <canvas id="report-chart"></canvas>
+    </div>
+
+@code {
+    private string _name { get; set; }
+    private string Name
+    {
+        get => _name;
+        set
+        {
+            Task.Run(GetResult);
+            _name = value;
+        }
+    }
+
+    private async Task GetResult()
+    {
+        var report = ReportsService.CountryPopularity(Name);
+        const int numberOfCountries = 5;
+        var r = report
+            .OrderByDescending(p => p.Value)
+            .Take(numberOfCountries)
+            .Select(p => new {
+                Name = p.Key,
+                Number = p.Value
+            });
+        string fullJson = JsonConvert.SerializeObject(r);
+        await JSRuntime.InvokeAsync<Task>("CountriesByGoodsCategory.setResult", new object[] {fullJson});
+    }
+}

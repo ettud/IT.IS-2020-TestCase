@@ -1,29 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using LogBasePresenter.DatabaseModels;
 using LogBasePresenter.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace LogBasePresenter
 {
     class LogBaseContext : DbContext
     {
-        public LogBaseContext() : base()
+#if DEBUG
+        public LogBaseContext() : base(new DbContextOptionsBuilder().UseNpgsql("Server=127.0.0.1;Port=5432;Database=EttudItis20Test;User Id=postgres;Password=postgres;").Options) { }
+#endif
+        public LogBaseContext(DbContextOptions options) : base(options)
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            modelBuilder.Entity<LogRecord>(e =>
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=EttudItis20Test;User Id=postgres;Password=postgres;");
-                /*#if DEBUG
-                                optionsBuilder.UseLoggerFactory(new LoggerFactory().AddConsole(LogLevel.Debug));
-                #endif*/
-            }
+                e.Property(p => p.QueryDescription).HasColumnType("json");
+            });
+
+            modelBuilder.Entity<Subnet>(e =>
+            {
+                e.HasOne(s => s.Country)
+                    .WithMany(c => c.Subnets)
+                    .HasForeignKey(d => d.CountryId)
+                    .IsRequired();
+            });
         }
 
         public DbSet<LogRecord> LogRecords { get; set; }
+        public DbSet<Country> Country { get; set; }
+        public DbSet<Subnet> Subnet { get; set; }
     }
 }

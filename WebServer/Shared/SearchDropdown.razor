@@ -1,0 +1,84 @@
+﻿@using WebServer.Services
+@inject IJSRuntime JSRuntime
+
+<div class="goods-categories-dropdown">
+    <input type="checkbox" @bind="_dropdownOpen" />
+    <input class="goods-categories-dropdown-input"
+           @bind-value="_inputString" @bind-value:event="oninput"
+           @onfocusin="(e) => _dropdownOpen = true"
+           name="@Name"/>
+    <div class="goods-categories-dropdown-menu">
+        @{
+            if (Options == null)
+            {
+                <p>No data</p>
+            }
+            else
+            {
+                <ul class="goods-categories-dropdown-options">
+                    @foreach (var option in Options
+                        .Where(o => string.IsNullOrEmpty(_inputString) || 
+                                    o.IndexOf(_inputString, StringComparison.InvariantCulture) != -1))
+                    {
+                        <li class="goods-categories-dropdown-option">
+                            <a class="@(_inputString.Equals(option, StringComparison.InvariantCulture) ? "active" : "")" 
+                               @onclick="() => OnItem(option)">@option</a>
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private bool _dropdownOpen = false;
+    private string __inputString = "";
+    private string _inputString
+    {
+        get => __inputString;
+        set
+        {
+            if (__inputString.Equals(value, StringComparison.InvariantCulture) || 
+                ((Options.Contains(__inputString) == true) 
+                 && (Options.Contains(value) == false)))
+            {
+                Task.Run(async () => await OnUnselected());
+            }
+            else if (Options.Contains(value) == true)
+            {
+                Task.Run(async () => await OnSelected(value));
+            }
+            __inputString = value;
+        }
+    }
+    [Parameter]
+    public Action<string> Bl_OnChange { get; set; }
+    [Parameter]
+    public string Js_OnChange { get; set; }
+    [Parameter]
+    public string Name { get; set; }
+    [Parameter]
+    public IEnumerable<string> Options { get; set; }
+
+    private async Task OnItem(string str)
+    {
+        _inputString = str;
+    }
+
+    private async Task OnSelected(string str)
+    {
+        Bl_OnChange?.Invoke(str);
+        try
+        {
+            await JSRuntime.InvokeVoidAsync(Js_OnChange, new object[]{str});
+        }
+        catch(Exception ex) { }
+    }
+
+    private async Task OnUnselected()
+    {
+        Bl_OnChange?.Invoke(null);
+        await JSRuntime.InvokeVoidAsync(Js_OnChange, new object[]{null});
+    }
+}

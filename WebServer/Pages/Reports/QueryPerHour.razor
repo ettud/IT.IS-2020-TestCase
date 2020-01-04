@@ -1,0 +1,18 @@
+﻿@page "/reports/AverageQueryPerHour"
+@using WebServer.Services
+@layout MainLayout
+@inject ReportsService ReportsService
+
+<div>
+    <div>В среднем в час поступает @((_result?.ToString("0.00"))??"???") заявок</div>
+</div>
+
+@code
+{
+    private double? _result { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _result = ReportsService.AverageQueryPerHour();
+    }
+}

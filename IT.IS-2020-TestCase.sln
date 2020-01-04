@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogParser", "LogParser\LogParser.csproj", "{DAE89E0D-3DAE-49D4-A772-F68042E32C59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogParser", "LogParser\LogParser.csproj", "{DAE89E0D-3DAE-49D4-A772-F68042E32C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBasePresenter", "LogBasePresenter\LogBasePresenter.csproj", "{53BD77C5-C3F6-4F0C-AABE-A55BCC1C5CC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogBasePresenter", "LogBasePresenter\LogBasePresenter.csproj", "{53BD77C5-C3F6-4F0C-AABE-A55BCC1C5CC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogParserNUnitTests", "LogParserNUnitTests\LogParserNUnitTests.csproj", "{498F6E79-894D-425F-9D05-71DBB2EF0017}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogParserNUnitTests", "LogParserNUnitTests\LogParserNUnitTests.csproj", "{498F6E79-894D-425F-9D05-71DBB2EF0017}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBasePresenterNUnitTests", "LogBasePresenterNUnitTests\LogBasePresenterNUnitTests.csproj", "{162C2273-726B-485D-83F1-354E7EA2BE9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebServer", "WebServer\WebServer.csproj", "{B27DAB98-5D0F-4AB5-AFD9-7E8446CA391C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpParser", "IpParser\IpParser.csproj", "{03BA10F8-D649-4843-8F04-56AD8A9DFB69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseSetup", "DatabaseSetup\DatabaseSetup.csproj", "{84E9E14E-F322-40DE-8FE0-318F5B9EC198}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +33,18 @@ Global
 		{498F6E79-894D-425F-9D05-71DBB2EF0017}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{498F6E79-894D-425F-9D05-71DBB2EF0017}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{498F6E79-894D-425F-9D05-71DBB2EF0017}.Release|Any CPU.Build.0 = Release|Any CPU
-		{162C2273-726B-485D-83F1-354E7EA2BE9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{162C2273-726B-485D-83F1-354E7EA2BE9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{162C2273-726B-485D-83F1-354E7EA2BE9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{162C2273-726B-485D-83F1-354E7EA2BE9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B27DAB98-5D0F-4AB5-AFD9-7E8446CA391C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B27DAB98-5D0F-4AB5-AFD9-7E8446CA391C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B27DAB98-5D0F-4AB5-AFD9-7E8446CA391C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B27DAB98-5D0F-4AB5-AFD9-7E8446CA391C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03BA10F8-D649-4843-8F04-56AD8A9DFB69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03BA10F8-D649-4843-8F04-56AD8A9DFB69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03BA10F8-D649-4843-8F04-56AD8A9DFB69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03BA10F8-D649-4843-8F04-56AD8A9DFB69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84E9E14E-F322-40DE-8FE0-318F5B9EC198}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84E9E14E-F322-40DE-8FE0-318F5B9EC198}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84E9E14E-F322-40DE-8FE0-318F5B9EC198}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84E9E14E-F322-40DE-8FE0-318F5B9EC198}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

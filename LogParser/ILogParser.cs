@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LogParser
 {
-    interface ILogParser
+    public interface ILogParser
     {
         IEnumerable<LogRecord> ParseLogs(StreamReader stream);
         int ParseLogs(StreamReader stream, Action<LogRecord> onLogRecordParsed);

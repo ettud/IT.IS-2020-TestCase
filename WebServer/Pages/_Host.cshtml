@@ -1,0 +1,63 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Http
+@namespace WebServer.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject IHttpContextAccessor HttpContextAccessor
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestToken;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebServer</title>
+    <base href="~/" />
+
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/navmenu.css" rel="stylesheet" />
+    <link href="css/admin/uploadlogs.css" rel="stylesheet" />
+    <link href="css/shared/goodscategoriesdropdown.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="js/_host.js"></script>
+    <script type="text/javascript" src="js/actions_tracker.js"></script>
+    <script type="text/javascript" src="/js/admin/uploadlogs.js"></script>
+    <script type="text/javascript" src="/js/reports/goodscategory.js"></script>
+    <script type="text/javascript" src="/js/reports/countries.js"></script>
+    <script type="text/javascript" src="/js/reports/CountriesByGoodsCategory.js"></script>
+    <script type="text/javascript" src="/js/reports/AverageQueryPerHour.js"></script>
+    <script type="text/javascript" src="/js/reports/ComplementaryGoods.js"></script>
+
+    <script type="text/javascript" src="/libs/chart.js/package/dist/Chart.min.js"></script>
+</head>
+<body>
+    <input type="hidden" id="RequestVerificationToken"
+           name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
+
+    <app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

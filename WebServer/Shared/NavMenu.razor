@@ -1,0 +1,79 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">WebServer</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span> 
+    </button>
+</div>
+
+<div class="@NavMenuCssClass tree" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <input type="checkbox" checked="checked" class="folder" id="folder1" />
+            <label for="folder1">Администрирование</label>
+            <ul>
+                <li>
+                    <NavLink class="nav-link" href="admin/uploadlogs" Match="NavLinkMatch.All">
+                        <span class="nav-item">Загрузка логов</span> 
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink class="nav-link" href="admin/clearlogs" Match="NavLinkMatch.All">
+                        <span class="nav-item">Удаление логов</span> 
+                    </NavLink>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item px-3">
+            <input type="checkbox" checked="checked" class="folder" id="folder2" />
+            <label for="folder2">Отчёты</label>
+            <ul>
+                <li>
+                    <NavLink class="nav-link" href="reports/GoodsCategory" Match="NavLinkMatch.All">
+                        <span class="nav-item">Статистика категории товаров в течение дня</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink class="nav-link" href="reports/CountriesByGoodsCategory" Match="NavLinkMatch.All">
+                        <span class="nav-item">Статистика категории товаров по странам</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink class="nav-link" href="reports/ComplementaryGoods" Match="NavLinkMatch.All">
+                        <span class="nav-item">Связанные товары</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink class="nav-link" href="reports/AverageQueryPerHour" Match="NavLinkMatch.All">
+                        <span class="nav-item">Статистика запросов</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink class="nav-link" href="reports/countries" Match="NavLinkMatch.All">
+                        <span class="nav-item">Статистика запросов по странам</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink class="nav-link" href="reports/NumberOfCartsLeftUnpaid" Match="NavLinkMatch.All">
+                        <span class="nav-item">Статистика корзин</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink class="nav-link" href="reports/RegularCustomers" Match="NavLinkMatch.All">
+                        <span class="nav-item">Статистика повторных покупок</span>
+                    </NavLink>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

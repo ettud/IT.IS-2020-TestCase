@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
+WORKDIR /WebServer
+
+COPY . ./
+RUN dotnet restore WebServer
+RUN dotnet publish -c Release -o out WebServer
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /WebServer
+COPY --from=build-env /WebServer/out .
+ENTRYPOINT ["dotnet", "WebServer.dll"]

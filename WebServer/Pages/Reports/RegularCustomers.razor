@@ -1,0 +1,80 @@
+﻿@page "/reports/RegularCustomers"
+@using Microsoft.AspNetCore.WebUtilities
+@using WebServer.Services
+@layout MainLayout
+@inject ReportsService ReportsService
+@inject IDateTimeService DateTimeService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+    <div>
+        <DateTimePeriod Id="get-carts" FormActionUri="" FormMethod="@HttpMethod.Get"
+                        From="@_defaultFrom" To="@_defaultTo"
+                        Source="@((from, to) =>
+                                $"За период с {from:dd-MM-yy} до {to:dd-MM-yy} "+"" +
+                                "делали несколько покупок: "+
+                                $"{ReportsService.NumberOfRegularUsers(from, to)} покупателей.")" />
+    </div>
+
+@code
+{
+    private DateTime? _lastFrom { get; set; }
+    private DateTime? _lastTo { get; set; }
+    private DateTime? _curFrom { get; set; }
+    private DateTime? _curTo { get; set; }
+    
+    private DateTime? _defaultFrom => GetFromUri("from");
+    private DateTime? _defaultTo => GetFromUri("to");
+
+    private DateTime? GetFromUri(string parameterName)
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue(parameterName, out var sFrom))
+        {
+            if (double.TryParse(sFrom, out var dFrom))
+            {
+                return DateTimeService.FromJsGetTime(dFrom);
+            }
+        }
+        return null;
+    }
+
+    private int? Result { get; set; }
+
+    /*protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("from", out var sFrom))
+        {
+            if (double.TryParse(sFrom, out var dFrom))
+            {
+                _curFrom = DateTimeService.FromJsGetTime(dFrom);
+            }
+        }
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("to", out var sTo))
+        {
+            if (double.TryParse(sTo, out var dTo))
+            {
+                _curTo = DateTimeService.FromJsGetTime(dTo);
+            }
+        }
+    }
+
+    private async Task GetResult()
+    {
+        if (_curFrom.HasValue && _curTo.HasValue)
+        {
+            Result = await ReportsService.NumberOfCartsLeftUnpaid(_curFrom.Value, _curTo.Value);
+            _lastFrom = _curFrom;
+            _lastTo = _curTo;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeAsync<Task>("formDisablerBlazorWrapperWithBlazor", new object[] { "get-carts-submit", });
+        GetResult();
+    }*/
+}

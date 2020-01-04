@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
+WORKDIR /DatabaseSetup
+
+COPY . ./
+RUN dotnet restore DatabaseSetup
+RUN dotnet publish -c Release -o out DatabaseSetup
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /DatabaseSetup
+COPY --from=build-env /DatabaseSetup/out .
+COPY ./DatabaseSetup/appsettings.json .
+COPY ./DatabaseSetup/ddl.sql .
+COPY ./DatabaseSetup/logs.txt .
+COPY ./DatabaseSetup/GeoLite2-Country-CSV_20191217 ./GeoLite2-Country-CSV_20191217
+ENTRYPOINT ["dotnet", "DatabaseSetup.dll"]

@@ -1,0 +1,82 @@
+﻿@inherits LayoutComponentBase
+@layout MainLayout
+@inject IJSRuntime JSRuntime
+
+<h1>Тестовое задание</h1>
+
+<div>
+    <div class="tree">
+        <ul>
+            <li>
+                <input type="checkbox" checked="checked" />
+                <label class="folder">
+                    <input type="radio" name="selection" checked="checked" />
+                    <span>
+                        Действия
+                    </span>
+                </label>
+                <ul>
+                    <li>
+                        <input type="checkbox" checked="checked" />
+                        <label class="folder">
+                            <input type="radio" name="selection" />
+                            <span>
+                                Администрирование
+                            </span>
+                        </label>
+                        <ul>
+                            <li>
+                                <label class="file">
+                                    <input type="radio" name="selection" />
+                                    <form id="clear-logs" action="/api/admin/clearlogs" method="delete" target="_blank">
+                                        <input id="clear-logs-submit" type="submit" value="Удалить логи">
+                                    </form>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="file">
+                                    <input type="radio" name="selection" />
+                                    <form id="upload-logs" enctype="multipart/form-data" action="/api/admin/uploadlogs" method="post" target="_blank">
+                                        <input id="log-file" name="logFile" type="file" />
+                                        <input id="upload-logs-submit" type="submit" value="Submit">
+                                    </form>
+                                </label>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <input type="checkbox" checked="checked" />
+                        <label class="folder">
+                            <input type="radio" name="selection" />
+                            <span>
+                                Отчёты
+                            </span>
+                        </label>
+                        <ul>
+                            <li>
+                                <label class="file">
+                                    <input type="radio" name="selection" />
+                                    <form id="get-good-category" enctype="multipart/form-data" action="/api/reports/GoodsCategory" method="get" target="_blank">
+                                        <input id="goods-category-name" name="name" type="text" />
+                                        <input id="get-good-category-submit" type="submit" value="Submit">
+                                    </form>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="file">
+                                    <input type="radio" name="selection" />
+                                    <form id="get-query-per-hour" enctype="multipart/form-data" action="/api/reports/AverageQueryPerHour" method="get" target="_blank">
+                                        <input id="get-query-per-hour-submit" type="submit" value="Submit">
+                                    </form>
+                                </label>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="result-view">
+        @Body
+    </div>
+</div>

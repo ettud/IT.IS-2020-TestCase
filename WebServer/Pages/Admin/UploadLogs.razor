@@ -1,0 +1,65 @@
+﻿@page "/admin/uploadlogs"
+@using System.Reflection
+@using WebServer.Models.ReportsService
+@using WebServer.Services
+@layout MainLayout
+@inject ReportsService ReportsService
+@inject IJSRuntime JSRuntime
+
+    <div>
+        <div class="upload">
+            <div id="upload-files" class="awaiting">
+                <header>
+                    <p>
+                        <span class="up">Загрузите</span>
+                        <span class="load">текстовый файл с логами</span>
+                    </p>
+                </header>
+                <div id="upload-logs-drop-area" class="body" draggable="true" ondrop="window.drop">
+                    <i class="fa fa-file-text-o pointer-none" aria-hidden="true"></i>
+                    <div class="pointer-none"><b>Перетащите</b> файлы, <br /> <a id="upload-logs-click-to-find">найдите</a> на компьютере <br /> или <span>
+                        <div id="upload-logs-with-url-container">
+                            <form id="upload-logs-with-url" enctype="multipart/form-data" action="/api/admin/uploadlogswithurl" method="post" target="_blank">
+                                <input id="log-file-with-url" name="fileUrl" type="url" />
+                                <input id="upload-logs-submit-with-url" type="submit" value="Submit">
+                            </form>
+                        </div>
+    <a id="upload-logs-click-to-url">введите</a>
+</span> ссылку</div>
+                    <form id="upload-logs" enctype="multipart/form-data" action="/api/admin/uploadlogs" method="post" target="_blank">
+                        <input id="log-file" name="file" type="file" />
+                        <input id="upload-logs-submit" type="submit" value="Submit">
+                    </form>
+                </div>
+                <div class="upload-logs-loading">
+                    <Loading></Loading>
+                </div>
+                <!--
+                Success and fail animation by Josh Jones from https://codepen.io/josh-jones/pen/wvBGLGg
+                -->
+                <div class="upload-logs-success">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                        <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1" />
+                        <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                    </svg>
+                    <p>Логи успешно загружены</p>
+                </div>
+                <div class="upload-logs-fail">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                        <circle class="path circle" fill="none" stroke="#F00" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1" />
+                        <line class="path line" fill="none" stroke="#F00" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3" />
+                        <line class="path line" fill="none" stroke="#F00" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2" />
+                    </svg>
+                    <p>Произошла некая ошибка, а ленивый программист даже не предусмотрел это</p>
+                </div>
+                <button onclick="window.uploadlogs.sendAnother">Отправить другой файл</button>
+            </div>
+        </div>
+    </div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeAsync<Task>("uploadlogs.init");
+    }
+}

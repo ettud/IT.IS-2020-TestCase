@@ -1,0 +1,70 @@
+.tree {
+    display: inline-block;
+}
+
+.tree li > ul {
+    display: none;
+}
+
+.tree li input[type="checkbox"]:checked + label + ul {
+    display: block;
+}
+
+.tree input[type="radio"] {
+    display: none;
+}
+
+.tree input[type="checkbox"] {
+    opacity: 0;
+    position: relative;
+    z-index: 1000;
+    top: -1px;
+}
+
+.tree input[type="checkbox"] + label {
+    position: relative;
+    left: -18px;
+    width: -webkit-fill-available;
+}
+
+.tree ul {
+    list-style: none;
+    margin: 0 0 0 15px;
+    padding: 0;
+}
+
+.tree ul li {
+    margin: 0;
+    position: relative;
+}
+
+.tree input[type=checkbox] + label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    color: rgba(0, 0, 0, 0.4);
+    width: 10px;
+}
+
+.tree label span:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    color: rgba(0, 0, 0, 0.4);
+    letter-spacing: 5px;
+}
+
+
+.tree label {
+    color: #0366d6;
+}
+
+.tree label:hover {
+    background-color: rgba(1,227,249,0.5);
+    color: white;
+}
+
+.tree li input[type="checkbox"] + label:before{
+    content:"+";
+}
+.tree li input[type="checkbox"]:checked + label:before{
+    content:"-";
+}
