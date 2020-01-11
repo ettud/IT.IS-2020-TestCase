@@ -1,0 +1,16 @@
+﻿@font-face {
+    font-family: "Void";
+    src: url("/fonts/void/void_regular.otf");
+}
+
+@font-face {
+    font-family: "Void";
+    src: url("/fonts/void/void_bold.otf");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Void";
+    src: url("/fonts/void/void_thin.otf");
+    font-style: italic, oblique;
+}

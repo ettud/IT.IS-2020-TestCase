@@ -68,3 +68,7 @@
 .tree li input[type="checkbox"]:checked + label:before{
     content:"-";
 }
+
+.navbar-brand {
+    font-family: "Void";
+}

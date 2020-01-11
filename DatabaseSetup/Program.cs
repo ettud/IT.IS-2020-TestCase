@@ -24,11 +24,11 @@ namespace DatabaseSetup
 
             var configuration = builder.Build();
             string databaseName = new NpgsqlConnection(configuration.GetSection("ConnectionStrings:DefaultConnection").Value).Database;
-            using(var ddlStrem = new StreamReader(configuration.GetSection("Ddl").Value))
+            using(var ddlStream = new StreamReader(configuration.GetSection("Ddl").Value))
             {
                 CreateDatabase(configuration.GetSection("ConnectionStrings:AdminConnection").Value, 
                     databaseName,
-                    ddlStrem);
+                    ddlStream);
             }
             string defaultConnectionString = configuration.GetSection("ConnectionStrings:DefaultConnection").Value;
             {
